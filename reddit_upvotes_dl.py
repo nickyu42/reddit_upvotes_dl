@@ -36,7 +36,7 @@ from lxml import html
 NUM_WORKERS = 4
 
 HEADERS = {
-    'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36'
+    'User-Agent': 'TestApp by /u/nickyu42'
 }
 
 
@@ -93,15 +93,20 @@ class RedditScraper:
         
     def login(self):
         payload = {
+            'op': 'login-main',
             'user': USERNAME,
             'passwd': PASSWORD,
-            'op': 'login-main',
             'api_type': 'json'
         }
 
         res = self.session.post("https://www.reddit.com/api/login/{}".format(USERNAME), data=payload, headers=HEADERS)
         try:
             res.raise_for_status()
+
+            # grab modhash needed for authentication
+            modhash = res.json()['json']['data']['modhash']
+            HEADERS['X-Modhash'] = modhash
+
         except Exception as e:
             print_status('Failed to login', status_code=0)
             print(e)
