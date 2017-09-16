@@ -36,7 +36,7 @@ from lxml import html
 NUM_WORKERS = 4
 
 HEADERS = {
-    'User-Agent': 'TestApp by /u/nickyu42'
+    'User-Agent': 'RedditApp by /u/<USERNAME>'
 }
 
 
