@@ -173,7 +173,7 @@ def image_exists(url, download_path):
     """Checks if the image in the specified folder already exists and returns True or False"""
     filename = url.split('/')[-1]
     download_path = download_path + '\\' + filename
-    return True if os.path.isfile(download_path) else False
+    return os.path.isfile(download_path)
 
 
 def get_subreddits():
@@ -254,7 +254,7 @@ class App:
             # all links are formatted as //i.imgur.com/<IMAGE NAME>
             # so the shema is added before the image is downloaded
             link = 'http:' + link
-            self.queue.put((link, post['download_path']))
+            self.queue.put((link, post['download_path'], post['subreddit']))
 
     def start_workers(self):
         for i in range(NUM_WORKERS):
@@ -264,7 +264,7 @@ class App:
             thread.start()
 
     def workers_alive(self):
-        return any([True if t.isAlive() else False for t in self.threads])
+        return any([t.isAlive() for t in self.threads])
 
     def run(self):
         self.grab_links()
